@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ <mapper namespace="com.yz.dao.AdminMapper">
+     
+<resultMap type="kebiao" id="kaab">
+		<id property="id" column="id"/>
+		<result property="shijian" column="shijian"/>
+		<result property="jieci" column="jieci"/>
+		<result property="jiaoshi" column="jiaoshi"/>
+	<association property="laoshi" javaType="com.yz.bean.laoshi">
+		<id property="id" column="id"/>
+		<result property="xingming" column="xingming"/>
+	</association>
+	<association property="kecheng" javaType="com.yz.bean.Kecheng">
+		<id property="id" column="id"/>
+		<result property="bianhao" column="bianhao"/>
+		<result property="mingcheng" column="mingcheng"/>
+		<result property="keshi" column="keshi"/>
+	</association>
+</resultMap> 
+<select id="login" resultType="com.yz.bean.Admin">
+select * from t_admin where userName=#{userName} and userPw=#{userPw}
+</select>
+
+<update id="adminPwEdit">
+update t_admin set userPw=#{userPw} where userName=#{userName}
+</update>
+
+<select id="loginlaoshi" resultType="com.yz.bean.laoshi">
+select * from t_laoshi where loginname=#{loginname} and loginpw=#{loginpw}
+</select>
+
+<select id="loginxuesheng" resultType="com.yz.bean.xuesheng">
+select * from t_xuesheng where loginname=#{loginname} and loginpw=#{loginpw}
+</select>
+
+<insert id="add" parameterType="com.yz.bean.Admin"> 
+	insert into t_admin(userName,userPw) values (#{userName},#{userPw})
+</insert>
+
+<select id="adminList" resultType="com.yz.bean.Admin">
+    select * from t_admin
+</select>
+
+<select id="kechengList" resultType="com.yz.bean.Kecheng">
+    select * from t_kecheng
+</select>
+<insert id="kechengAdd" parameterType="com.yz.bean.Kecheng">
+	insert into t_kecheng(bianhao,mingcheng,keshi)values(#{bianhao},#{mingcheng},#{keshi})
+</insert>
+<delete id="kechengDel">
+	delete  from t_kecheng where id=#{id}
+</delete>
+
+<select id="sellaoshi" resultType="com.yz.bean.laoshi">
+	select * from t_laoshi
+</select>
+<delete id="laoshiDel">
+	delete  from t_laoshi  where id=#{id}
+</delete>
+<insert id="laoshiAdd" parameterType="com.yz.bean.laoshi">
+	insert into t_laoshi(bianhao,xingming,xingbie,nianling,zhicheng,loginname,loginpw)
+	values(#{bianhao},#{xingming},#{xingbie},#{nianling},#{zhicheng},#{loginname},#{loginpw})
+</insert>
+
+
+<select id="selkebiao" resultMap="kaab">
+	SELECT * FROM t_kecheng a,t_kebiao b,t_laoshi c WHERE a.id=b.kecheng_id AND c.id=b.laoshi_id
+</select>
+<delete id="kebiaoDel">
+	delete  from t_kebiao where id=#{id}
+</delete>
+<insert id="kebiaoAdd" parameterType="com.yz.bean.kebiao">
+	insert into t_kebiao(kecheng_id,shijian,jieci,jiaoshi,laoshi_id)values(#{kecheng_id},#{shijian},#{jieci},#{jiaoshi},#{laoshi_id})
+</insert>
+
+<select id="selxuesheng" resultType="com.yz.bean.xuesheng">
+	select * from t_xuesheng
+</select>
+<delete id="xueshengDel">
+	delete  from t_xuesheng where id=#{id}
+</delete>
+<insert id="xueshengAdd" parameterType="com.yz.bean.xuesheng">
+	insert into t_xuesheng(xuehao,xingming,xingbie,nianling,banji,loginname,loginpw)values(#{xuehao},#{xingming},#{xingbie},#{nianling},#{banji},#{loginname},#{loginpw})
+</insert>
+
+ </mapper>
